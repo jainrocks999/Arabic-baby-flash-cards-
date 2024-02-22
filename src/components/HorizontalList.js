@@ -55,7 +55,7 @@ const HorizontalList = ({items}) => {
           : Platform.select({
               android:
                 'https://play.google.com/store/apps/details?id=com.eFlashArabic',
-              ios: 'https://apps.apple.com/us/app/russian-baby-flash-cards/id527936601',
+              ios: 'https://apps.apple.com/us/app/arabic-baby-flash-card/id576235350',
             }),
       );
     }

@@ -1,5 +1,4 @@
 import {Platform} from 'react-native';
-import {TestIds} from 'react-native-google-mobile-ads';
 export const Addsid = {
   ...Platform.select({
     android: {
@@ -7,8 +6,8 @@ export const Addsid = {
       Interstitial: 'ca-app-pub-3339897183017333/9651688788',
     },
     ios: {
-      BANNER: 'ca-app-pub-3339897183017333/2767550380',
-      Interstitial: 'ca-app-pub-3339897183017333/6038110373',
+      BANNER: 'ca-app-pub-3339897183017333/9372487181',
+      Interstitial: 'ca-app-pub-3339897183017333/8686618153',
     },
   }),
 };
