@@ -1,17 +1,15 @@
 import {
   View,
-  Text,
   ImageBackground,
   TouchableOpacity,
   Image,
   StyleSheet,
   BackHandler,
-  Alert,
   ScrollView,
   SafeAreaView,
   StatusBar,
 } from 'react-native';
-import {height, width} from '../components/Diemenstions';
+import {height} from '../components/Diemenstions';
 import React, {useContext, useEffect, useState} from 'react';
 import Switch from '../components/Switch';
 import {useDispatch, useSelector} from 'react-redux';
@@ -20,8 +18,6 @@ import {QuestionMode} from '../reduxToolkit/Slice3';
 import {addSetting} from '../reduxToolkit/Slice2';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import Header from '../components/Header';
-import {addCancleble} from '../reduxToolkit/Slice5';
-import {addPagable} from '../reduxToolkit/Slicer6';
 var SQLite = require('react-native-sqlite-storage');
 import {
   heightPercentageToDP as hp,
@@ -32,15 +28,25 @@ const db = SQLite.openDatabase({
   createFromLocation: 1,
 });
 import {isTablet} from 'react-native-device-info';
-import {BannerAd, BannerAdSize} from 'react-native-google-mobile-ads';
+import {
+  AdEventType,
+  BannerAd,
+  BannerAdSize,
+  InterstitialAd,
+} from 'react-native-google-mobile-ads';
 import {Addsid} from './ads';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {IAPContext} from '../Context';
 import PurcahsdeModal from '../components/requestPurchase';
+const authId = Addsid.Interstitial;
+const requestOption = {
+  requestNonPersonalizedAdsOnly: true,
+  keywords: ['fashion', 'clothing'],
+};
 const SettingScreen = props => {
   const {hasPurchased, requestPurchase, checkPurchases, visible, setVisible} =
     useContext(IAPContext);
-
+  const interstitial = InterstitialAd.createForAdRequest(authId, requestOption);
   const pr = props.route.params.pr;
   const muted = useSelector(state => state.sound);
   const canlable = useSelector(state => state.cancle);
@@ -60,6 +66,16 @@ const SettingScreen = props => {
     Voice: setting.Voice,
   });
   const [questionMode, setquestion] = useState(quesion);
+  const showAdd = () => {
+    const unsubscribe = interstitial.addAdEventListener(
+      AdEventType.LOADED,
+      () => {
+        interstitial.show();
+      },
+    );
+    interstitial.load();
+    return unsubscribe;
+  };
   const handleSwitch = (name, value) => {
     if (questionMode == 1) {
       alert('This setting is disabled when quesion mode is enabled');
@@ -74,6 +90,7 @@ const SettingScreen = props => {
     if (pr === 'question') {
       if (questionMode == 0) {
         Navigation.dispatch(StackActions.replace('details'));
+        !hasPurchased && showAdd();
         dispatch({
           type: 'backSoundFromquestions/playWhenThePage',
           fromDetails: false,
@@ -91,6 +108,7 @@ const SettingScreen = props => {
     } else if (pr === 'details') {
       if (questionMode == 1) {
         Navigation.dispatch(StackActions.replace('question'));
+        !hasPurchased && showAdd();
         dispatch({
           type: 'backSoundFromquestions/playWhenThePage',
           fromDetails: false,

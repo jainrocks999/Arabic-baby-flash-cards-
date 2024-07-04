@@ -64,14 +64,6 @@ export const RightVOid = [
     artwork: '${path}goodanswer.mp3',
     duration: null,
   }),
-  (track4 = {
-    url: `${path}youcandoit.mp3`, // Load media from the file system
-    title: 'goodjob',
-    artist: 'eFlashApps',
-    // Load artwork from the file system:
-    //artwork: '${path}youcandoit.mp3',
-    duration: null,
-  }),
   (track5 = {
     url: `${path}great.mp3`, // Load media from the file system
     title: 'great',
